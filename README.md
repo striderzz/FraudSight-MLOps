@@ -1,4 +1,4 @@
-# Vigil – Fraud MLOps
+# Precog – Fraud MLOps
 
 **An end-to-end MLOps platform for real-time credit card fraud detection**
 
@@ -10,7 +10,7 @@ XGBoost · LightGBM · Feast · MLflow · FastAPI · Kafka · Docker · Kubernet
 
 ## Overview
 
-Vigil covers the full machine learning lifecycle for a high-stakes, heavily imbalanced problem: catching fraudulent card transactions within milliseconds.
+Precog covers the full machine learning lifecycle for a high-stakes, heavily imbalanced problem: catching fraudulent card transactions within milliseconds.
 
 It is built on the public **ULB credit card fraud dataset** (about 284K transactions, roughly 0.17% fraud). Transactions are also replayed as a live stream so the system runs as it would in production, not just in a notebook.
 
@@ -49,7 +49,7 @@ flowchart LR
 ## Planned repository structure
 
 ```
-vigil-fraud-mlops/
+precog-fraud-mlops/
 ├── features/            # Feast feature definitions
 ├── training/            # training pipelines, tuning, evaluation
 ├── serving/             # FastAPI scoring service

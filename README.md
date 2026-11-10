@@ -1,4 +1,4 @@
-# Precog – Fraud MLOps
+# FraudSight MLOps
 
 Card-fraud detection taken from raw data to a versioned, monitored scoring API: XGBoost, MLflow registry, FastAPI and Evidently drift checks.
 
@@ -10,7 +10,7 @@ Card-fraud detection taken from raw data to a versioned, monitored scoring API: 
 
 ## Why this exists
 
-Fraud is rare. In the public ULB card dataset, 492 of 284,807 transactions are fraud (about 0.17%). A model that says "not fraud" every time is 99.8% accurate and useless. A useful fraud model has to be judged on metrics built for imbalance, split by time so it never sees the future, and tuned to a threshold that reflects what a missed fraud and a false alarm actually cost. Then it has to be served, versioned and watched, because fraud patterns move. Most portfolio fraud projects stop at a notebook. Precog covers the whole loop on one laptop: train, compare, register, serve, detect drift, retrain.
+Fraud is rare. In the public ULB card dataset, 492 of 284,807 transactions are fraud (about 0.17%). A model that says "not fraud" every time is 99.8% accurate and useless. A useful fraud model has to be judged on metrics built for imbalance, split by time so it never sees the future, and tuned to a threshold that reflects what a missed fraud and a false alarm actually cost. Then it has to be served, versioned and watched, because fraud patterns move. Most portfolio fraud projects stop at a notebook. FraudSight covers the whole loop on one laptop: train, compare, register, serve, detect drift, retrain.
 
 ## What it does
 
@@ -119,7 +119,7 @@ An MLflow server (SQLite backend, local artifact store with `--serve-artifacts`)
 
 ### FastAPI scoring service
 
-On startup the service loads `models:/precog-fraud@production` and records the version number. Endpoints:
+On startup the service loads `models:/fraudsight-fraud@production` and records the version number. Endpoints:
 
 - `POST /score`: one transaction in, `{score, decision, threshold, model_version}` out
 - `POST /score/batch`: up to a configured number of transactions
@@ -157,8 +157,8 @@ Input is a Pydantic model with all 30 fields required, extra fields rejected, fi
 Planned layout (nothing is built yet):
 
 ```
-precog-fraud-mlops/
-├── src/precog/
+fraudsight-mlops/
+├── src/fraudsight/
 │   ├── config.py              # settings from .env and configs/
 │   ├── data/
 │   │   ├── download.py        # Kaggle download, checksum
@@ -213,8 +213,8 @@ Target workflow, once Phase 1 lands. These commands do not work yet.
 **Prerequisites**: Python 3.11, Docker with Compose, `make`, and a free Kaggle account with an API token (for the dataset download).
 
 ```bash
-git clone https://github.com/striderzz/precog-fraud-mlops.git
-cd precog-fraud-mlops
+git clone https://github.com/striderzz/fraudsight-mlops.git
+cd fraudsight-mlops
 cp .env.example .env        # add KAGGLE_USERNAME and KAGGLE_KEY
 ```
 
@@ -279,17 +279,17 @@ Nothing has been measured yet. Each value is filled from a real run and the raw 
 
 - **Feast feature store**: offline and online features (rolling counts, amount vs recent median) shared by training and serving, so stateful features can be served without skew
 - **Kubernetes deploy**: kind or minikube manifests with a Horizontal Pod Autoscaler on the scoring service, plus a load test
-- **Fraud explainer with Claude Haiku**: turns the top SHAP contributions into a one-sentence reason for an analyst, using `claude-haiku-5-5` through the `anthropic` SDK, offline from the scoring path, with prompt caching, per-call cost logging and a small hand-checked eval set. On ULB the features are anonymized (`V14`), so this is most useful on named features from Ironbank or IEEE-CIS
-- **Score Ironbank transfers**: a separate model trained on features Ironbank actually has (amount, hour, per-account velocity), called from the ledger's transfer flow
+- **Fraud explainer with Claude Haiku**: turns the top SHAP contributions into a one-sentence reason for an analyst, using `claude-haiku-5-5` through the `anthropic` SDK, offline from the scoring path, with prompt caching, per-call cost logging and a small hand-checked eval set. On ULB the features are anonymized (`V14`), so this is most useful on named features from IronPay or IEEE-CIS
+- **Score IronPay transfers**: a separate model trained on features IronPay actually has (amount, hour, per-account velocity), called from the ledger's transfer flow
 - **IEEE-CIS as a second dataset**: per-card features and a larger, messier schema
 - **Optuna tuning** with time-aware validation
 
 ## Related projects
 
-- [Ironbank – Payments Ledger](https://github.com/striderzz/ironbank-payments-ledger): the shared demo payments app; scoring its transfers is a Precog stretch goal
-- [Deckard – LLM Eval](https://github.com/striderzz/deckard-llm-eval): the evaluation approach for the stretch-goal fraud explainer
-- [Endurance – AWS DevOps](https://github.com/striderzz/endurance-aws-devops): deploys Ironbank to AWS; the same patterns would host the Precog scoring API
-- [Rapture – Lakestream Platform](https://github.com/striderzz/rapture-lakestream-platform): data engineering pipeline; a natural upstream source of transaction features at larger scale
+- [IronPay LedgerAPI](https://github.com/striderzz/ironpay-ledgerapi): the shared demo payments app; scoring its transfers is a FraudSight stretch goal
+- [EvalForge LLMOps](https://github.com/striderzz/evalforge-llmops): the evaluation approach for the stretch-goal fraud explainer
+- [CloudShip DevOps](https://github.com/striderzz/cloudship-devops): deploys IronPay to AWS; the same patterns would host the FraudSight scoring API
+- [TaxiStream Lakehouse](https://github.com/striderzz/taxistream-lakehouse): data engineering pipeline; a natural upstream source of transaction features at larger scale
 
 ## Author
 

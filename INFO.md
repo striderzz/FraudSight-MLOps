@@ -1,4 +1,4 @@
-# Precog – Fraud MLOps: interview prep
+# FraudSight MLOps: interview prep
 
 Companion to [README.md](README.md). Use this to explain the project end to end, defend each decision, and answer follow-ups. Nothing here is a measured result. Where a number belongs, it says `[measured metric]` or `—` until the run exists in `docs/results/`.
 
@@ -90,7 +90,7 @@ The results are in the README table: [measured metric] for PR-AUC, [measured met
 - Experiment, run, parameters, metrics, artifacts
 - Logging a model flavor (`mlflow.sklearn.log_model`) with a signature and input example
 - Registered model, versions, and aliases (`@staging`, `@production`); stages are deprecated
-- Model URI `models:/precog-fraud@production`
+- Model URI `models:/fraudsight-fraud@production`
 - Tracking server with a backend store (SQLite here) and artifact store; `--serve-artifacts` proxies artifact downloads over HTTP
 
 **FastAPI**
@@ -378,10 +378,10 @@ It multiplies the gradient and hessian of positive examples, so each fraud contr
 SHAP assigns each feature its average marginal contribution across all orderings of features, and TreeSHAP computes this exactly for trees. The values add up: base value plus contributions equals the model's log-odds output. The limit on ULB is that `V1`–`V28` are PCA components, so SHAP can say `V14` pushed the score up, but not what that means in business terms. SHAP also explains the model, not causality.
 
 **16. How does the MLflow registry work in your setup?**
-Each training run logs parameters, metrics, artifacts and the full pipeline. A run's model is registered as a new version of `precog-fraud`. Aliases point to versions: `staging` for the candidate, `production` for what the API serves. Promotion is moving the alias, and rollback is moving it back. I use aliases because the older stage API is deprecated.
+Each training run logs parameters, metrics, artifacts and the full pipeline. A run's model is registered as a new version of `fraudsight-fraud`. Aliases point to versions: `staging` for the candidate, `production` for what the API serves. Promotion is moving the alias, and rollback is moving it back. I use aliases because the older stage API is deprecated.
 
 **17. How does the API load the model and stay fast?**
-A FastAPI lifespan handler loads `models:/precog-fraud@production` once at startup and keeps it in memory, so no request touches MLflow. Prediction is CPU-bound, so the endpoint is a plain `def`, which FastAPI runs in a thread pool instead of blocking the event loop. Each Uvicorn worker has its own copy of the model. Latency per request is measured in middleware and logged.
+A FastAPI lifespan handler loads `models:/fraudsight-fraud@production` once at startup and keeps it in memory, so no request touches MLflow. Prediction is CPU-bound, so the endpoint is a plain `def`, which FastAPI runs in a thread pool instead of blocking the event loop. Each Uvicorn worker has its own copy of the model. Latency per request is measured in middleware and logged.
 
 **18. What does Pydantic validation catch?**
 Missing fields, wrong types, extra fields (with `extra="forbid"`), NaN or infinite values and negative amounts. FastAPI returns a 422 with field-level errors before the model runs. This protects the model from silent garbage, for example a client sending amounts in cents or a renamed column.

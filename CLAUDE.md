@@ -1,4 +1,4 @@
-# CLAUDE.md: Precog build guide
+# CLAUDE.md: FraudSight MLOps build guide
 
 This file tells Claude (Claude Code) how to build this project. Read **README.md** first: it is the design spec. This file is the build plan. **INFO.md** is the interview-prep companion; keep it consistent with what is actually built.
 
@@ -14,10 +14,10 @@ Python 3.11, pandas, scikit-learn, imbalanced-learn (SMOTE only), XGBoost, SHAP,
 
 ## Build order (phases)
 
-1. Scaffold (`src/precog/`, `pyproject.toml`, `Makefile`, `.env.example`, `.gitignore` with data folders), Kaggle download script, schema checks, dedupe, time-based train/val/test split (about 60/20/20 by `Time`), EDA notebook on imbalance. CI workflow with ruff + unit tests from day one, including a no-overlap split test.
+1. Scaffold (`src/fraudsight/`, `pyproject.toml`, `Makefile`, `.env.example`, `.gitignore` with data folders), Kaggle download script, schema checks, dedupe, time-based train/val/test split (about 60/20/20 by `Time`), EDA notebook on imbalance. CI workflow with ruff + unit tests from day one, including a no-overlap split test.
 2. Feature pipeline (`log1p(Amount)`, hour of day, scaling) as a scikit-learn `Pipeline`; evaluation module (average precision, recall at 1% FPR, recall at fixed precision, bootstrap CIs); logistic regression baseline; MLflow tracking server and run logging.
 3. XGBoost with early stopping on validation `aucpr`; imbalance comparison (none, `scale_pos_weight`, SMOTE inside an imbalanced-learn pipeline on the training fold only); cost-based threshold chosen on validation; SHAP global plot and example explanations logged to MLflow.
-4. MLflow registry with `staging` and `production` aliases; `promote.py` gate (promote only if test PR-AUC beats the current production model on the same window); FastAPI service (`/score`, `/score/batch`, `/health`, `/model-info`, optional `?explain=true`) loading `models:/precog-fraud@production`, Pydantic validation, JSON latency logging; `scripts/bench_latency.py` for p50/p95/p99.
+4. MLflow registry with `staging` and `production` aliases; `promote.py` gate (promote only if test PR-AUC beats the current production model on the same window); FastAPI service (`/score`, `/score/batch`, `/health`, `/model-info`, optional `?explain=true`) loading `models:/fraudsight-fraud@production`, Pydantic validation, JSON latency logging; `scripts/bench_latency.py` for p50/p95/p99.
 5. Docker Compose (`mlflow` + `api`, health checks, `--serve-artifacts`); CI adds a training smoke test on synthetic data with the real schema (no dataset download in CI) and an API image build.
 6. Shifted and control batch simulator; Evidently data drift report vs the training window (HTML + JSON in `docs/results/drift/`); `retrain_trigger.py` retrains when drift share passes `DRIFT_THRESHOLD` and sends the new model through the Phase 4 gate.
 7. Fill the README results table from real runs, add screenshots (MLflow UI, Evidently report, API docs), how-it-works notes in `docs/`, demo GIF.
@@ -29,7 +29,7 @@ Only after Phase 7 is done and CI is green.
 - Feast feature store (offline + online) for stateful features such as rolling counts and amount vs recent median
 - Kubernetes deploy (kind or minikube) with a Horizontal Pod Autoscaler and a load test
 - Fraud explainer: `claude-haiku-5-5` via the `anthropic` SDK turns top SHAP contributions into a one-sentence analyst reason; offline from the scoring path, prompt caching, per-call cost logging, small hand-checked eval set (budget is about $100 total)
-- Score Ironbank (`ironbank-payments-ledger`) transfers with a separate model trained on features Ironbank actually has
+- Score IronPay (`ironpay-ledgerapi`) transfers with a separate model trained on features IronPay actually has
 - IEEE-CIS as a second dataset with per-card features
 - Optuna tuning with time-aware validation; LightGBM comparison
 

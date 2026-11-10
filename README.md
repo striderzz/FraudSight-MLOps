@@ -1,4 +1,4 @@
-# Vigil
+# Vigil – Fraud MLOps
 
 **An end-to-end MLOps platform for real-time credit card fraud detection**
 
@@ -49,7 +49,7 @@ flowchart LR
 ## Planned repository structure
 
 ```
-Vigil/
+vigil-fraud-mlops/
 ├── features/            # Feast feature definitions
 ├── training/            # training pipelines, tuning, evaluation
 ├── serving/             # FastAPI scoring service

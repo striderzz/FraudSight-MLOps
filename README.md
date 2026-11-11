@@ -157,7 +157,7 @@ Input is a Pydantic model with all 30 fields required, extra fields rejected, fi
 Planned layout (nothing is built yet):
 
 ```
-fraudsight-mlops/
+FraudSight-MLOps/
 ├── src/fraudsight/
 │   ├── config.py              # settings from .env and configs/
 │   ├── data/
@@ -213,8 +213,8 @@ Target workflow, once Phase 1 lands. These commands do not work yet.
 **Prerequisites**: Python 3.11, Docker with Compose, `make`, and a free Kaggle account with an API token (for the dataset download).
 
 ```bash
-git clone https://github.com/striderzz/fraudsight-mlops.git
-cd fraudsight-mlops
+git clone https://github.com/striderzz/FraudSight-MLOps.git
+cd FraudSight-MLOps
 cp .env.example .env        # add KAGGLE_USERNAME and KAGGLE_KEY
 ```
 
@@ -286,10 +286,10 @@ Nothing has been measured yet. Each value is filled from a real run and the raw 
 
 ## Related projects
 
-- [IronPay LedgerAPI](https://github.com/striderzz/ironpay-ledgerapi): the shared demo payments app; scoring its transfers is a FraudSight stretch goal
-- [EvalForge LLMOps](https://github.com/striderzz/evalforge-llmops): the evaluation approach for the stretch-goal fraud explainer
-- [CloudShip DevOps](https://github.com/striderzz/cloudship-devops): deploys IronPay to AWS; the same patterns would host the FraudSight scoring API
-- [TaxiStream Lakehouse](https://github.com/striderzz/taxistream-lakehouse): data engineering pipeline; a natural upstream source of transaction features at larger scale
+- [IronPay LedgerAPI](https://github.com/striderzz/IronPay-LedgerAPI): the shared demo payments app; scoring its transfers is a FraudSight stretch goal
+- [EvalForge LLMOps](https://github.com/striderzz/EvalForge-LLMOps): the evaluation approach for the stretch-goal fraud explainer
+- [CloudShip DevOps](https://github.com/striderzz/CloudShip-DevOps): deploys IronPay to AWS; the same patterns would host the FraudSight scoring API
+- [TaxiStream Lakehouse](https://github.com/striderzz/TaxiStream-Lakehouse): data engineering pipeline; a natural upstream source of transaction features at larger scale
 
 ## Author
 

@@ -29,7 +29,7 @@ Only after Phase 7 is done and CI is green.
 - Feast feature store (offline + online) for stateful features such as rolling counts and amount vs recent median
 - Kubernetes deploy (kind or minikube) with a Horizontal Pod Autoscaler and a load test
 - Fraud explainer: `claude-haiku-5-5` via the `anthropic` SDK turns top SHAP contributions into a one-sentence analyst reason; offline from the scoring path, prompt caching, per-call cost logging, small hand-checked eval set (budget is about $100 total)
-- Score IronPay (`ironpay-ledgerapi`) transfers with a separate model trained on features IronPay actually has
+- Score IronPay (`IronPay-LedgerAPI`) transfers with a separate model trained on features IronPay actually has
 - IEEE-CIS as a second dataset with per-card features
 - Optuna tuning with time-aware validation; LightGBM comparison
 

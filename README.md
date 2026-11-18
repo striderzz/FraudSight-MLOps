@@ -284,6 +284,11 @@ Nothing has been measured yet. Each value is filled from a real run and the raw 
 - **IEEE-CIS as a second dataset**: per-card features and a larger, messier schema
 - **Optuna tuning** with time-aware validation
 
+## Docs
+
+- [INFO.md](INFO.md): high-level overview, system design (architecture, data model) and workflow diagrams.
+- [INTERVIEW.md](INTERVIEW.md): 30-second and 2-minute pitches, interview questions with answers, resume bullets.
+
 ## Related projects
 
 - [IronPay LedgerAPI](https://github.com/striderzz/IronPay-LedgerAPI): the shared demo payments app; scoring its transfers is a FraudSight stretch goal

@@ -1,6 +1,6 @@
 # CLAUDE.md: FraudSight MLOps build guide
 
-This file tells Claude (Claude Code) how to build this project. Read **README.md** first: it is the design spec. This file is the build plan. **INFO.md** is the interview-prep companion; keep it consistent with what is actually built.
+This file tells Claude (Claude Code) how to build this project. Read **README.md** first: it is the design spec. This file is the build plan. **INFO.md** (overview, system design, workflows) and **INTERVIEW.md** (interview Q&A) are the companions; keep them consistent with what is actually built.
 
 ## Goal
 
@@ -56,4 +56,4 @@ Only after Phase 7 is done and CI is green.
 
 ## Status
 
-Only `README.md`, `INFO.md` and this file exist so far. Start at **Phase 1**.
+Only `README.md`, `INFO.md`, `INTERVIEW.md` and this file exist so far. Start at **Phase 1**.
